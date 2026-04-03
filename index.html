@@ -296,7 +296,10 @@ async function cloudSave(data) {
     });
   } catch(e) {}
   // Always also save to localStorage as fallback
-  try { localStorage.setItem(STORE_KEY, JSON.stringify(data)); } catch(e){}
+  try { db.collection("tests").add({
+  title: "Sample Test",
+  question: "What is 2+2?"
+}); } catch(e){}
 }
 
 async function cloudLoad() {
@@ -1092,5 +1095,17 @@ init();
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
 </script>
+  <script>
+db.collection("tests").get().then((snapshot) => {
+  snapshot.forEach((doc) => {
+    const data = doc.data();
+
+    const div = document.createElement("div");
+    div.innerHTML = data.title + " - " + data.question";
+
+    document.body.appendChild(div);
+  });
+});
+  </script>
 </body>
 </html>
